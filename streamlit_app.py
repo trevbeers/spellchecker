@@ -34,9 +34,10 @@ def check_spelling(files_dict):
                 line = re.sub('[~"^|{}<>*]|NoPUNCT|NoCAPS|PIPESYM', '', line)
                 line = re.sub(r'\[[0-9A-Za-z/;_]+\]', ' ', line)
                 line = line.replace('/', ' ')
+                line = line.replace('〽️', ' ')
                 line = re.sub(' +', ' ', line)
 
-                words = [w.strip() for w in re.split(r'[\s,.!?—()-:]', line)
+                words = [w.strip(" '") for w in re.split(r'[\s,.!?—()-:]', line)
                          if w.strip() and not w.startswith('[') and w != '|' and '_' not in w]
                 words = words[1:]
 
