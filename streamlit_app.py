@@ -78,7 +78,7 @@ if files:
     words = []
     for w in set(spelling_df['Possible misspellings']):
         words += [w.strip() for w in w.split(';')]
-    ignore_words = st.multiselect('Words to ignore', words)
+    ignore_words = st.multiselect('Words to ignore', sorted(words))
     if ignore_words:
         spelling_df = check_spelling(files, okay_words=ignore_words)
     if len(spelling_df) == 0:
