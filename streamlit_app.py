@@ -73,8 +73,16 @@ for f in raw_files:
     files[f.name] = string_data
 
 if files:
+    st.write('-' * 100)
     spelling_df = check_spelling(files)
     ignore_words = st.multiselect('Words to ignore', set(spelling_df['Possible misspellings']))
     if ignore_words:
-        spelling_df = check_spelling(files, okay_words=ignore_words)
-    st.dataframe(spelling_df)
+        words = []
+        for w in ignore_words:
+            words += [w.strip() for w in w.split(';')]
+        spelling_df = check_spelling(files, okay_words=words)
+    if len(spelling_df) == 0:
+        st.balloons()
+        st.write('😍 No problems!')
+    else:
+        st.dataframe(spelling_df)
