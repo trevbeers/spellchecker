@@ -75,12 +75,12 @@ for f in raw_files:
 if files:
     st.write('-' * 100)
     spelling_df = check_spelling(files)
-    ignore_words = st.multiselect('Words to ignore', set(spelling_df['Possible misspellings']))
+    words = []
+    for w in set(spelling_df['Possible misspellings']):
+        words += [w.strip() for w in w.split(';')]
+    ignore_words = st.multiselect('Words to ignore', words)
     if ignore_words:
-        words = []
-        for w in ignore_words:
-            words += [w.strip() for w in w.split(';')]
-        spelling_df = check_spelling(files, okay_words=words)
+        spelling_df = check_spelling(files, okay_words=ignore_words)
     if len(spelling_df) == 0:
         st.balloons()
         st.write('😍 No problems!')
