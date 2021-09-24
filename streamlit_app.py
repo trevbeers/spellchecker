@@ -61,7 +61,7 @@ def check_spelling(files_dict, okay_words=None):
 
 
 st.title("Spelling check")
-raw_files = st.file_uploader('Select syn and lex files', accept_multiple_files=True, key='files')
+raw_files = st.file_uploader('', accept_multiple_files=True, key='files')
 files = {}
 for f in raw_files:
     # To read file as bytes:
