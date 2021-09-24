@@ -71,10 +71,10 @@ for f in raw_files:
     # To read file as string:
     string_data = stringio.read()
     files[f.name] = string_data
-    
+
 if files:
     spelling_df = check_spelling(files)
-    ignore_words = st.multiselect('Words to ignore', list(spelling_df['Possible misspellings']))
+    ignore_words = st.multiselect('Words to ignore', set(spelling_df['Possible misspellings']))
     if ignore_words:
         spelling_df = check_spelling(files, okay_words=ignore_words)
     st.dataframe(spelling_df)
