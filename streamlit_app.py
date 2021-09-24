@@ -4,13 +4,16 @@ import pandas as pd
 from spellchecker import SpellChecker
 import streamlit as st
 
+spell = SpellChecker()
 
-def check_spelling(files_dict):
-    spell = SpellChecker()
 
+def check_spelling(files_dict, okay_words=None):
     misspelled_line = []
     misspelled_word = []
     file_name = []
+
+    if not okay_words:
+        okay_words = []
 
     for name, contents in files_dict.items():
         file_lines = contents.splitlines()
@@ -42,7 +45,8 @@ def check_spelling(files_dict):
                 words = words[1:]
 
                 misspelled = spell.unknown(words)
-                misspelled = [m for m in misspelled if any([ch.isalpha() for ch in list(m)]) and len(m) > 1]
+                misspelled = [m for m in misspelled if any([ch.isalpha() for ch in list(m)]) and len(m) > 1
+                              and m not in okay_words]
                 if misspelled:
                     misspelled_line += [og_line]
                     misspelled_word += ['; '.join(misspelled)]
@@ -67,7 +71,10 @@ for f in raw_files:
     # To read file as string:
     string_data = stringio.read()
     files[f.name] = string_data
+    
 if files:
-    if st.button('Check spelling'):
-        spelling_df = check_spelling(files)
-        st.dataframe(spelling_df)
+    spelling_df = check_spelling(files)
+    ignore_words = st.multiselect('Words to ignore', list(spelling_df['Possible misspellings']))
+    if ignore_words:
+        spelling_df = check_spelling(files, okay_words=ignore_words)
+    st.dataframe(spelling_df)
